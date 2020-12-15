@@ -142,8 +142,6 @@ async function connectToAccessPoint(apAddress, apPort) {
     const sharedSecret = diffieHellman.computeSecret(remoteKey);
     
     var keys = computeKeys(sharedSecret, clientHelloBuffer, clientHelloResponse.raw);
-
-    console.log(`Challenge: ${keys.challenge.toString('hex')}\nSend Key: ${keys.sendKey.toString('hex')}\nRecieve Key: ${keys.recieveKey.toString('hex')}`);
     await clientResponse(promiseSocket, keys.challenge);
     
     return new ApConnection(promiseSocket, keys);

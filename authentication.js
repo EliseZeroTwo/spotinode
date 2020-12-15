@@ -19,7 +19,7 @@ async function passwordAuthentication(apConnection, user, password) {
     var result = await apConnection.recieve();
     if (result.cmd == 0xac) { // APWelcome
         var apWelcomeResponse = authenticationMessages.APWelcome.decode(result.payload);
-        console.log(apWelcomeResponse);
+        console.log(`Successfully authenticated as ${apWelcomeResponse['canonical_username']}`);
     }
 }
 

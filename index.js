@@ -15,7 +15,8 @@ async function asyncMain() {
     const apAddr = (await getAccessPoint()).split(':');
     console.log(`Connecting to ${apAddr.join(':')}`);
     var connection = await handshake.connectToAccessPoint(apAddr[0], apAddr[1]);
-    console.log(`Connected to ${apAddr.join(':')}!\nAuthenticating...`);
+    console.log(`Connected to ${apAddr.join(':')}`);
+    await authentication.passwordAuthentication(connection, '', '');
     exit(0);
 }
 
