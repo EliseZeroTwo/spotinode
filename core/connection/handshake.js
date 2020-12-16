@@ -4,7 +4,8 @@ const protobuf = require('protocol-buffers');
 const {PromiseSocket, TimeoutError} = require("promise-socket");
 const Shannon = require('shannon');
 const struct = require('python-struct');
-const keyExchangeMessages = protobuf(fs.readFileSync('keyexchange.proto'));
+
+const keyExchangeMessages = protobuf(fs.readFileSync(`${process.cwd()}/protocol/keyexchange.proto`));
 
 class ApConnection {
     constructor(socket, keys) {

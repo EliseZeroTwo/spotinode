@@ -1,6 +1,7 @@
 const fs = require('fs');
 const protobuf = require('protocol-buffers');
-const authenticationMessages = protobuf(fs.readFileSync('authentication.proto'));
+
+const authenticationMessages = protobuf(fs.readFileSync(`${process.cwd()}/protocol/authentication.proto`));
 
 async function passwordAuthentication(apConnection, user, password) {
     var clientReponseEncrypted = authenticationMessages.ClientResponseEncrypted.encode({
@@ -19,8 +20,9 @@ async function passwordAuthentication(apConnection, user, password) {
     var result = await apConnection.recieve();
     if (result.cmd == 0xac) { // APWelcome
         var apWelcomeResponse = authenticationMessages.APWelcome.decode(result.payload);
-        console.log(`Successfully authenticated as ${apWelcomeResponse['canonical_username']}`);
-    }
+        return apWelcomeResponse;
+    } 
+    return undefined;
 }
 
 module.exports = { passwordAuthentication };
