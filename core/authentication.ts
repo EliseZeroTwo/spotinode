@@ -1,12 +1,13 @@
-const fs = require('fs');
-const protobuf = require('protocol-buffers');
+import fs = require('fs');
+import protobuf = require('protocol-buffers');
+import ApConnection from './connection/apconnection';
 
 const authenticationMessages = protobuf(fs.readFileSync(`${process.cwd()}/protocol/authentication.proto`));
 
-async function passwordAuthentication(apConnection, user, password) {
-    var clientReponseEncrypted = authenticationMessages.ClientResponseEncrypted.encode({
+export async function passwordAuthentication(apConnection: ApConnection, username: string, password: string) {
+    let clientReponseEncrypted = authenticationMessages.ClientResponseEncrypted.encode({
         login_credentials: {
-            username: user,
+            username: username,
             typ: authenticationMessages.AuthenticationType.AUTHENTICATION_USER_PASS,
             auth_data: password
         },
@@ -17,12 +18,10 @@ async function passwordAuthentication(apConnection, user, password) {
     });
 
     await apConnection.send(0xab, clientReponseEncrypted);
-    var result = await apConnection.recieve();
+    let result = await apConnection.recieve();
     if (result.cmd == 0xac) { // APWelcome
-        var apWelcomeResponse = authenticationMessages.APWelcome.decode(result.payload);
+        let apWelcomeResponse = authenticationMessages.APWelcome.decode(result.payload);
         return apWelcomeResponse;
     } 
     return undefined;
 }
-
-module.exports = { passwordAuthentication };

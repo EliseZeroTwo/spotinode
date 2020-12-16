@@ -1,10 +1,11 @@
 const exit = require('process').exit;
-const Session = require('./core/session').Session;
+const Session = require('./core/session').default;
+
+const spotifyId = require('./core/spotifyID');
 
 
 async function asyncMain() {
     var session = new Session();
-    await session.connect('', '');
     exit(0);
 }
 

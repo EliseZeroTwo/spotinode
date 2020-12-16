@@ -1,11 +1,11 @@
 const axios = require('axios');
 
-const apFallback = 'ap.spotify.com:443';
-const apResolveEndpoint = 'https://apresolve.spotify.com';
+const apFallback: string = 'ap.spotify.com:443';
+const apResolveEndpoint: string = 'https://apresolve.spotify.com';
 
-async function getAccessPoint() {
+export default async function getAccessPoint(): Promise<string> {
     try {
-        var resp = await axios.get(apResolveEndpoint);
+        let resp = await axios.get(apResolveEndpoint);
         if (resp.data['ap_list'] != undefined && resp.data['ap_list'].length > 0)
             return resp.data['ap_list'][0];
         return apFallback;
@@ -13,5 +13,3 @@ async function getAccessPoint() {
         return apFallback;
     }
 }
-
-module.exports = { getAccessPoint };
